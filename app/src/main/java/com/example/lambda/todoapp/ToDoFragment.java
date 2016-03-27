@@ -8,7 +8,12 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+
+import java.util.zip.CheckedInputStream;
 
 /**
  * Created by Lawrence on 3/26/2016.
@@ -22,8 +27,11 @@ import android.widget.EditText;
  *
  */
 public class ToDoFragment extends Fragment{
-    ToDo mToDo;
-    EditText mTitleField;
+    private ToDo mToDo;
+    private EditText mTitleField;
+
+    private Button mDateButton;
+    private CheckBox mCompletedCheckBox;
 
     // Fragment.onCreate() works nearly the same as Activity.onCreate,
     // the only difference is that you can View.findViewById(int) on the fragment's view.
@@ -63,6 +71,23 @@ public class ToDoFragment extends Fragment{
                 // we don't use this method, so leave blank.
             }
         });
+
+        // wire up mDateButton, set text to current date.
+        // we disable it for now, but will set it up to open date picker widget.
+        mDateButton = (Button) view.findViewById(R.id.todo_date);
+        mDateButton.setText(mToDo.getFormattedDate().toString());
+        mDateButton.setEnabled(false);
+
+        // wire up check box.
+        mCompletedCheckBox = (CheckBox) view.findViewById(R.id.todo_completed);
+        mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                // set the todo task's completed property
+                mToDo.setCompleted(true);
+            }
+        });
+
 
         return view;
     } // end onCreateView
