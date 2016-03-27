@@ -4,10 +4,10 @@
   android:layout_height="match_parent"
   android:orientation="vertical"
   >
-  <EditText android:id="@+id/crime_title"
+  <EditText android:id="@+id/todo_title"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="@string/crime_title_hint"
+    android:hint="@string/todo_title_hint"
     />
 
 </LinearLayout>

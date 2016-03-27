@@ -5,7 +5,7 @@ package com.example.lambda.todoapp;
  *
  * ToDoActivity.java is also a controller.
  *
- * It interacts with ToDoFragment and FrameLayout.
+ * It interacts with ToDoFragment and FrameLayout (fragmentContainer).
  *
  */
 public class ToDoActivity {
