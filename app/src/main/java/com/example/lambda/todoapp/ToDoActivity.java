@@ -1,12 +1,8 @@
 package com.example.lambda.todoapp;
 
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 // since we set min sdk as Android Ice Cream Sandwich, not using support libs for earlier android versions.
-import android.app.Fragment;
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.telephony.SubscriptionManager;
 
 import java.util.UUID;
 
@@ -17,6 +13,8 @@ import java.util.UUID;
  * ToDoActivity.java is also a controller.
  *
  * It interacts with ToDoFragment and FrameLayout (fragmentContainer).
+ *
+ * This java file is extraneous since we are using a ViewPager (ToDoPagerActivity).
  *
  */
 public class ToDoActivity extends SingleFragmentActivity{

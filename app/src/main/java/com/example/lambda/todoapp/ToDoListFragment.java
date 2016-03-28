@@ -1,6 +1,6 @@
 package com.example.lambda.todoapp;
 
-import android.app.ListFragment;
+import android.support.v4.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -56,7 +56,10 @@ public class ToDoListFragment extends ListFragment {
         // start a ToDoActivity when user clicks an item on the list.
         // we do so by creating an EXPLICIT intent.
         // (i.e. we "intent" to start a new ToDoActivity, given the current context.)
-        Intent intent = new Intent(getActivity(), ToDoActivity.class);
+        //Intent intent = new Intent(getActivity(), ToDoActivity.class);
+        // we are using a Pager now, so start Pager which manages the ToDoActivity
+        // start ToDoPagerActivity with this ToDo
+        Intent intent = new Intent(getActivity(), ToDoPagerActivity.class);
 
         intent.putExtra(ToDoFragment.EXTRA_TODO_ID, t.getId());     // putExtra is how we pass "info" from one activity to the next.
         // putExtra takes an unique TAG identifier and a Serializable object (which UUID's are).

@@ -1,9 +1,9 @@
 package com.example.lambda.todoapp;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.os.Bundle;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 
 /**
  * Created by Lawrence on 3/27/2016.
@@ -12,7 +12,7 @@ import android.os.Bundle;
  * we'll create an abstract class SingleFragmentActivity that future fragment activities will use.
  *
  */
-public abstract class SingleFragmentActivity extends Activity {
+public abstract class SingleFragmentActivity extends FragmentActivity {
 
     // this is the only diff between this and ToDoActivity.java
     // it is used to instantiate the fragment.
@@ -29,7 +29,7 @@ public abstract class SingleFragmentActivity extends Activity {
         // After Honeycomb, the Activity class using Fragment Manager to mange fragments (ToDoFragment)
         // and add their views to the activity's (ToDoActivity) view hierarchy.
         // FragmentManager handles 2 things: list of fragments and a back stack of fragment transactions.
-        FragmentManager fragmentManager = getFragmentManager();
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
 
         // ask Fragment Manager for fragment with a container view ID of R.id.fragmentContainer
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragmentContainer);
