@@ -13,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.UUID;
 import java.util.zip.CheckedInputStream;
 
 /**
@@ -27,6 +28,9 @@ import java.util.zip.CheckedInputStream;
  *
  */
 public class ToDoFragment extends Fragment{
+
+    public static final String EXTRA_TODO_ID = "com.example.lambda.todoapp.todointent.todo_id";
+
     private ToDo mToDo;
     private EditText mTitleField;
 
@@ -41,8 +45,15 @@ public class ToDoFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mToDo = new ToDo();
 
+        // we are retrieving the EXTRA info from the intent that was sent to ToDoFragment.
+        //UUID todoId = (UUID) getActivity().getIntent().getSerializableExtra(EXTRA_TODO_ID);
+        // we use getArguments() now since we are using Bundles for the "extras" instead of Intents.
+        UUID todoId = (UUID) getArguments().getSerializable(EXTRA_TODO_ID);
+
+
+        // that extra info was the id of the todo object.
+        mToDo = ToDoList.get(getActivity()).getToDo(todoId);
     }
 
     @Nullable
@@ -55,6 +66,7 @@ public class ToDoFragment extends Fragment{
         // set a TextWatcher to update model if text is changed.
         // It is analogous to setting onClickListeners on Buttons.
         mTitleField = (EditText) view.findViewById(R.id.todo_title);        // have to use view.findView, can't just use this.findView...
+        mTitleField.setText(mToDo.getTitle());      // change the textfield to match data in ToDo Model.
         mTitleField.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -80,6 +92,7 @@ public class ToDoFragment extends Fragment{
 
         // wire up check box.
         mCompletedCheckBox = (CheckBox) view.findViewById(R.id.todo_completed);
+        mCompletedCheckBox.setChecked(mToDo.isCompleted());         // mark the checkbox if it was set.
         mCompletedCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -88,7 +101,23 @@ public class ToDoFragment extends Fragment{
             }
         });
 
-
         return view;
     } // end onCreateView
+
+
+    // we're writing this method so that we don't break encapsulation between the host activity (ToDoActivity)
+    // and the hostee fragment (ToDoFragment). We want to any activity to host a ToDoFragment, not just ToDoActivity.
+    // to accomplish this, we use arguments bundles to "stash" extra info, instead of the "putExtra stash"
+    // every fragment can have a Bundle object attach to it. Bundles contain key-val pairs that work just like the intent extras of an Activity.
+    // each pair is known as an argument.
+    public static ToDoFragment newInstance(UUID todoId){
+
+        Bundle args = new Bundle();
+        args.putSerializable(EXTRA_TODO_ID, todoId);
+
+        ToDoFragment fragment = new ToDoFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 }

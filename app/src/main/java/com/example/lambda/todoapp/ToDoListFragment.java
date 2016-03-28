@@ -1,6 +1,7 @@
 package com.example.lambda.todoapp;
 
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -49,7 +50,27 @@ public class ToDoListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         ToDo t = ((ToDoAdapter)getListAdapter()).getItem(position);
-        Log.d(TAG, t.getTitle() + " was clicked");
+
+        //Log.d(TAG, t.getTitle() + " was clicked"); // spot check to see if item clicker was working.
+
+        // start a ToDoActivity when user clicks an item on the list.
+        // we do so by creating an EXPLICIT intent.
+        // (i.e. we "intent" to start a new ToDoActivity, given the current context.)
+        Intent intent = new Intent(getActivity(), ToDoActivity.class);
+
+        intent.putExtra(ToDoFragment.EXTRA_TODO_ID, t.getId());     // putExtra is how we pass "info" from one activity to the next.
+        // putExtra takes an unique TAG identifier and a Serializable object (which UUID's are).
+
+        startActivity(intent);
+    }
+
+    // we implement onResume() so that when we press the back button from a ToDoActivity after making a change
+    // the changes will appear on the ToDoListActivity (and not solely just update the model).
+    // we can do this at the onResume (not the onStart) lifecycle.
+    @Override
+    public void onResume() {
+        super.onResume();
+        ( (ToDoAdapter)getListAdapter() ).notifyDataSetChanged();
     }
 
 
