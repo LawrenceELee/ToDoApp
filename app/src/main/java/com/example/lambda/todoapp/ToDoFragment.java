@@ -1,6 +1,7 @@
 package com.example.lambda.todoapp;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -30,6 +31,8 @@ import java.util.zip.CheckedInputStream;
 public class ToDoFragment extends Fragment{
 
     public static final String EXTRA_TODO_ID = "com.example.lambda.todoapp.todointent.todo_id";
+    public static final String DIALOG_DATE = "date";
+
 
     private ToDo mToDo;
     private EditText mTitleField;
@@ -85,10 +88,17 @@ public class ToDoFragment extends Fragment{
         });
 
         // wire up mDateButton, set text to current date.
-        // we disable it for now, but will set it up to open date picker widget.
         mDateButton = (Button) view.findViewById(R.id.todo_date);
         mDateButton.setText(mToDo.getFormattedDate().toString());
-        mDateButton.setEnabled(false);
+        // show a date picker dialog when date button clicked.
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                DatePickerFragment dialog = new DatePickerFragment();
+                dialog.show(fm, DIALOG_DATE);
+            }
+        });
 
         // wire up check box.
         mCompletedCheckBox = (CheckBox) view.findViewById(R.id.todo_completed);

@@ -19,6 +19,8 @@ import java.util.UUID;
  * This is part of the controller layer. It also sits between the ToDoListFragment (controller)
  * and the ToDoFragment (controller).
  *
+ * It will control the ToDoFragment (controller) and DatePickerFragment (controller).
+ *
  */
 public class ToDoPagerActivity extends FragmentActivity{
 
