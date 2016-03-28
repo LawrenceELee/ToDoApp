@@ -6,5 +6,7 @@
     <string name="todo_title_label">Title</string>
     <string name="todo_details_label">Details</string>
     <string name="todo_completed_label">Completed?</string>
+    <string name="date_picker_title">Start date:</string>
+    <string name="todo_title">Crimes</string>
 
 </resources>

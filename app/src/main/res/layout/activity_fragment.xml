@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This is the layout for ToDoActivity. -->
-<!-- FramLayout is the container view for ToDoFragment. We are using android's standard/default fragment container. -->
+<!-- FrameLayout is the container view for ToDoFragment. We are using android's standard/default fragment container. -->
+<!-- We are re-purposing activity_todo to be more general to work with ANY fragment -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:id="@+id/fragmentContainer"
   android:layout_width="match_parent"

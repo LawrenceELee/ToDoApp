@@ -37,6 +37,11 @@ public class ToDo {
         return dateFormat.format("EEE, MMM d yyyy", mDate);
     }
 
+    @Override
+    public String toString(){
+        return mTitle;
+    }
+
     public UUID getId() {
         return mId;
     }
