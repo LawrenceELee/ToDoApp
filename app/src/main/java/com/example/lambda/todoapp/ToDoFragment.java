@@ -1,5 +1,7 @@
 package com.example.lambda.todoapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
@@ -14,24 +16,24 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.util.Date;
 import java.util.UUID;
 import java.util.zip.CheckedInputStream;
 
 /**
  * Created by Lawrence on 3/26/2016.
- *
+ * <p/>
  * ToDoFragment.java is the controller.
- *
+ * <p/>
  * It interacts with the View (layout).
  * It will have a View consisting of LinearLayout and an EditText and will have a listener that updates the model layer when text changes.
  * And interacts with Model by referencing a ToDo instance.
- *
- *
  */
-public class ToDoFragment extends Fragment{
+public class ToDoFragment extends Fragment {
 
-    public static final String EXTRA_TODO_ID = "com.example.lambda.todoapp.todointent.todo_id";
+    public static final String EXTRA_TODO_ID = "com.example.lambda.todoapp.todo_id";
     public static final String DIALOG_DATE = "date";
+    private static final int REQUEST_DATE = 0;
 
 
     private ToDo mToDo;
@@ -89,13 +91,14 @@ public class ToDoFragment extends Fragment{
 
         // wire up mDateButton, set text to current date.
         mDateButton = (Button) view.findViewById(R.id.todo_date);
-        mDateButton.setText(mToDo.getFormattedDate().toString());
+        updateDate();
         // show a date picker dialog when date button clicked.
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                DatePickerFragment dialog = new DatePickerFragment();
+                DatePickerFragment dialog = DatePickerFragment.newInstance(mToDo.getDate());
+                dialog.setTargetFragment(ToDoFragment.this, REQUEST_DATE);
                 dialog.show(fm, DIALOG_DATE);
             }
         });
@@ -115,12 +118,25 @@ public class ToDoFragment extends Fragment{
     } // end onCreateView
 
 
+    // respond to the dialog and set the date on the Fragment's date button.
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK)           return;
+
+        if( requestCode == REQUEST_DATE ){
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
+            mToDo.setDate(date);
+            updateDate();
+        }
+    }
+
+
     // we're writing this method so that we don't break encapsulation between the host activity (ToDoActivity)
     // and the hostee fragment (ToDoFragment). We want to any activity to host a ToDoFragment, not just ToDoActivity.
     // to accomplish this, we use arguments bundles to "stash" extra info, instead of the "putExtra stash"
-    // every fragment can have a Bundle object attach to it. Bundles contain key-val pairs that work just like the intent extras of an Activity.
+
     // each pair is known as an argument.
-    public static ToDoFragment newInstance(UUID todoId){
+    public static ToDoFragment newInstance(UUID todoId) {
 
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_TODO_ID, todoId);
@@ -129,5 +145,10 @@ public class ToDoFragment extends Fragment{
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    // helper function to update date on button
+    private void updateDate(){
+        mDateButton.setText(mToDo.getFormattedDate());
     }
 }
