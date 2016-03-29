@@ -8,5 +8,9 @@
     <string name="todo_completed_label">Completed?</string>
     <string name="date_picker_title">Due date:</string>
     <string name="todo_title">ToDos</string>
+    <string name="new_todo">New ToDo</string>
+    <string name="show_subtitle">Show Subtitle</string>
+    <string name="hide_subtitle">Hide Subtitle</string>
+    <string name="subtitle">Sometimes tolerance is not a virtue.</string>
 
 </resources>

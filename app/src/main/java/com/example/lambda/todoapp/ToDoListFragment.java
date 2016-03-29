@@ -4,6 +4,8 @@ import android.support.v4.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -76,6 +78,13 @@ public class ToDoListFragment extends ListFragment {
         ( (ToDoAdapter)getListAdapter() ).notifyDataSetChanged();
     }
 
+    // code to create the options/overflow menu (3 vertical dots on the upper right)
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.fragment_todo_list, menu);
+    }
 
     // using inner class to create an custom adapter for the list_item_todo view
     private class ToDoAdapter extends ArrayAdapter<ToDo> {
