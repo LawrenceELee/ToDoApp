@@ -5,6 +5,7 @@
         android:id="@+id/menu_item_new_todo"
         android:icon="@android:drawable/ic_menu_add"
         android:title="@string/new_todo"
+        android:showAsAction="ifRoom|withText"
         />
 
 </menu>

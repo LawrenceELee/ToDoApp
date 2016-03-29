@@ -31,6 +31,9 @@ public class ToDoListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setHasOptionsMenu(true);    // tell fragment that we have an options/overflow menu.
+
+
         // getActivity() method returns the hosting activity and allows a fragment
         // to handle more of the activity's affairs.
         // Here we are using it to call the setTitle(int) to change what is displayed on

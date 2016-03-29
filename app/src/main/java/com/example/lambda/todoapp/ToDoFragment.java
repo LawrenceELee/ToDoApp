@@ -50,7 +50,6 @@ public class ToDoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);    // tell fragment that we have an options/overflow menu.
 
         // we are retrieving the EXTRA info from the intent that was sent to ToDoFragment.
         //UUID todoId = (UUID) getActivity().getIntent().getSerializableExtra(EXTRA_TODO_ID);
