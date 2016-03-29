@@ -64,9 +64,22 @@ public class ToDoPagerActivity extends FragmentActivity{
             }
         }
 
-        // we could set the action bar to match the title of our todo,
-        // using mViewPager.setOnPageChangeListener() but it is deprecated and I can't get the action bar
-        // to show on the activity. so skipping it.
+        // setting text on actionbar to match the title of todo
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                ToDo t = mToDos.get(position);
+                if( t.getTitle() != null ){
+                    setTitle(t.getTitle());
+                }
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) { }
+
+            @Override
+            public void onPageScrollStateChanged(int state) { }
+        });
 
         // FragmentStatePagerAdapter vs. FragmentPagerAdapter
         // The only diff between them is that StatePager destroys (saves fragment's Bundle from onSavedInstanceState(Bundle))
