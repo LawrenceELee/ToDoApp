@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -87,6 +88,25 @@ public class ToDoListFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.fragment_todo_list, menu);
+    }
+
+    // When user presses a menu item in the options menu, the fragment relieves
+    // a callback to the onOptionsItemSelected() method. This method receives an instance of
+    // MenuItem that describes the user's selection.
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch( item.getItemId() ){
+            case R.id.menu_item_new_todo:
+                // code to add a new todo task to the ToDoPagerActivity for the "+" menu item
+                ToDo t = new ToDo();
+                ToDoList.get(getActivity()).addToDo(t);
+                Intent intent = new Intent(getActivity(), ToDoPagerActivity.class);
+                intent.putExtra(ToDoFragment.EXTRA_TODO_ID, t.getId());
+                startActivityForResult(intent, 0);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     // using inner class to create an custom adapter for the list_item_todo view

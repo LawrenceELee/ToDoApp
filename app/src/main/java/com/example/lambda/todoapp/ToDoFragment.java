@@ -1,14 +1,18 @@
 package com.example.lambda.todoapp;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -59,13 +63,28 @@ public class ToDoFragment extends Fragment {
 
         // that extra info was the id of the todo object.
         mToDo = ToDoList.get(getActivity()).getToDo(todoId);
+
+        // turn on options menu
+        setHasOptionsMenu(true);
     }
 
+    // the "up" button (ancestral hierarchy navigation) goes up the hierarchy vs.
+    // vs. the "back" button which goes back to the previous activity (temporal navigation).
+    // "up" button is not availabe before api 11, so warn users of this method with annotation.
+    @TargetApi(11)
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // inflate layout file into Java R's space.
         View view = inflater.inflate(R.layout.fragment_todo, container, false);
+
+        // for pre api 11 devices
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ){
+            // if there is no parent, then don't show the "up" caret
+            if( NavUtils.getParentActivityName(getActivity()) != null ){
+                getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);
+            }
+        }
 
         // wire up this Controller with EditText field by initialing the EditText and
         // set a TextWatcher to update model if text is changed.
@@ -130,11 +149,24 @@ public class ToDoFragment extends Fragment {
         }
     }
 
+    // respond to the app icon (home) menu item
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                // pressing the "up" button on the ToDoActivity brings you "back up to" the ToDoListActivity
+                if( NavUtils.getParentActivityName(getActivity()) != null ){
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     // we're writing this method so that we don't break encapsulation between the host activity (ToDoActivity)
     // and the hostee fragment (ToDoFragment). We want to any activity to host a ToDoFragment, not just ToDoActivity.
     // to accomplish this, we use arguments bundles to "stash" extra info, instead of the "putExtra stash"
-
     // each pair is known as an argument.
     public static ToDoFragment newInstance(UUID todoId) {
 

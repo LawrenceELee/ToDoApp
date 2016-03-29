@@ -3,7 +3,7 @@
     <string name="app_name">ToDo App</string>
     <string name="title_activity_todo">TodoActivity</string>
     <string name="todo_title_hint">Enter a title for this todo task.</string>
-    <string name="todo_title_label">Title</string>
+    <string name="todo_title_label">ToDo App</string>
     <string name="todo_details_label">Details</string>
     <string name="todo_completed_label">Completed?</string>
     <string name="date_picker_title">Due date:</string>

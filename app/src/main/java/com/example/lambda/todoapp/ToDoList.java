@@ -31,14 +31,6 @@ public class ToDoList {
         mContext = context;
         mToDos = new ArrayList<>();
 
-        // some code to populate list with dummy todo items
-        // tobe removed later.
-        for( int i=0; i < 100; ++i ){
-            ToDo t = new ToDo();
-            t.setTitle("ToDo #" + i);
-            t.setCompleted(i % 2 == 0);
-            mToDos.add(t);
-        }
     }
 
     public static ToDoList get(Context context){
@@ -49,10 +41,17 @@ public class ToDoList {
         return sToDoList;   // else there is already an instance of ToDoList, so just return ref to it.
     }
 
+    // add a todo to the arraylist
+    public void addToDo(ToDo t){
+        mToDos.add(t);
+    }
+
+    // return the list of todos
     public ArrayList<ToDo> getToDos(){
         return mToDos;
     }
 
+    // helper to get the specific todo that mataches id.
     public ToDo getToDo(UUID id){
         for( ToDo t : mToDos ){
             if( t.getId().equals(id) ){
