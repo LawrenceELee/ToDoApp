@@ -5,6 +5,7 @@ import android.support.v4.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -149,7 +151,70 @@ public class ToDoListFragment extends ListFragment {
 
         // register ListView for a context menu
         ListView listView = (ListView) view.findViewById(android.R.id.list);
-        registerForContextMenu(listView);
+
+        if( Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB ){
+            // use floating context menus on Froyo and Gingerbread
+            registerForContextMenu(listView);
+        } else {
+            // use contextual action bar on Honeycomb and higher versions.
+            listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+
+            // setting the MultiChoiceModeListener
+            listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+                // callback for when a view has been selected/deselected
+                @Override
+                public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {
+                    // required to be overriden, but not used
+                }
+
+                // called when ActionMode is created. this is where you inflate the context menu resource
+                // to be displayed in the contextual action bar.
+                @Override
+                public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+                    MenuInflater inflater = actionMode.getMenuInflater();
+                    inflater.inflate(R.menu.todo_list_item_context, menu);
+                    return true;
+                }
+
+                // called after onCreateActionMode(...) and whenever an exisiting contextual action bars needs to
+                // be refreshed with new data.
+                @Override
+                public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+                    // required to be overriden, but not used
+                    return false;
+                }
+
+                // called when the users selects and action. this is where you respond to contextual
+                // actions defined in the menu resource.
+                @Override
+                public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+                    switch( menuItem.getItemId() ){
+                        case R.id.menu_item_delete_todo:
+                            ToDoAdapter adapter = (ToDoAdapter) getListAdapter();
+                            ToDoList toDoList = ToDoList.get(getActivity());
+                            // look for the checked item on the ListView
+                            for( int i = adapter.getCount()-1; i > 0; --i  ){
+                                if( getListView().isItemChecked(i) ){
+                                    toDoList.deleteTodo(adapter.getItem(i));
+                                }
+                            }
+                            actionMode.finish();
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+
+                // called when ActionMode is about to be destroyed b/c user cancelled the action
+                // or the selected action has been responded to.
+                @Override
+                public void onDestroyActionMode(ActionMode actionMode) {
+                    // required to be overriden, but not used
+                }
+            });
+        }
 
 
         return view;
