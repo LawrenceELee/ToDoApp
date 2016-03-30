@@ -16,6 +16,7 @@ import org.json.JSONObject;
  */
 public class ToDo {
 
+    // these are the keys for the json key-val pair
     private static final String JSON_ID = "id";
     private static final String JSON_TITLE = "title";
     private static final String JSON_COMPLETED = "completed";
@@ -45,7 +46,17 @@ public class ToDo {
         return dateFormat.format("EEE, MMM d yyyy", mDate);
     }
 
-    // used to write model from ArrayList to a file
+    // read file (json) to model (arraylist)
+    public ToDo(JSONObject json) throws JSONException{
+        mId = UUID.fromString(json.getString(JSON_ID));
+        if( json.has(JSON_TITLE) ){
+            mTitle = json.getString(JSON_TITLE);
+        }
+        mCompleted = json.getBoolean(JSON_COMPLETED);
+        mDate = new Date(json.getLong(JSON_DATE));      // time is store as a long number, need to convert to Date.
+    }
+
+    // write model from ArrayList to a file
     public JSONObject toJSON() throws JSONException{
         JSONObject json = new JSONObject();  // JSONObject does the hardwork of converting data to JSON
         json.put(JSON_ID, mId.toString());

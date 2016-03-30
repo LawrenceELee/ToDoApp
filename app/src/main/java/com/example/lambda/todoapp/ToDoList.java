@@ -33,10 +33,19 @@ public class ToDoList {
     // note: the constructor is private and will use the get() method
     // to retrieve an instance of ToDoList.
     // this is important to writing a singleton design pattern.
+    // we will also use the constructor to load file (json) to model.
+    // will happen during the onPause() stage of lifecycle.
     private ToDoList(Context context){
         mContext = context;
-        mToDos = new ArrayList<>();
         mSerializer = new ToDoIntentJSONSerializer(mContext, FILENAME);
+
+        // try to load todos from the saved file, if it doesn't exist then create a blank arraylist.
+        try{
+            mToDos = mSerializer.loadToDos();
+        } catch( Exception e ){
+            mToDos = new ArrayList<>();
+            Log.e(TAG, "Error loading todos: ", e);
+        }
     }
 
     public static ToDoList get(Context context){
@@ -47,7 +56,8 @@ public class ToDoList {
         return sToDoList;   // else there is already an instance of ToDoList, so just return ref to it.
     }
 
-    // code to save file will happen during the onPause() stage of lifecycle.
+    // code to save model to file (json).
+    // will happen during the onPause() stage of lifecycle.
     public boolean saveToDos(){
         try{
             mSerializer.saveToDos(mToDos);
