@@ -164,6 +164,13 @@ public class ToDoFragment extends Fragment {
         }
     }
 
+    // save date/model when onPause()
+    @Override
+    public void onPause() {
+        super.onPause();
+        ToDoList.get(getActivity()).saveToDos();
+    }
+
     // we're writing this method so that we don't break encapsulation between the host activity (ToDoActivity)
     // and the hostee fragment (ToDoFragment). We want to any activity to host a ToDoFragment, not just ToDoActivity.
     // to accomplish this, we use arguments bundles to "stash" extra info, instead of the "putExtra stash"

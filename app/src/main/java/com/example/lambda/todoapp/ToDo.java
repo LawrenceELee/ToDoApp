@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.UUID;
 import android.text.format.DateFormat;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Lawrence on 3/26/2016.
  *
@@ -12,6 +15,11 @@ import android.text.format.DateFormat;
  *
  */
 public class ToDo {
+
+    private static final String JSON_ID = "id";
+    private static final String JSON_TITLE = "title";
+    private static final String JSON_COMPLETED = "completed";
+    private static final String JSON_DATE = "date";
 
     private UUID mId;
     private String mTitle;
@@ -35,6 +43,16 @@ public class ToDo {
     public CharSequence getFormattedDate(){
         DateFormat dateFormat = new DateFormat();
         return dateFormat.format("EEE, MMM d yyyy", mDate);
+    }
+
+    // used to write model from ArrayList to a file
+    public JSONObject toJSON() throws JSONException{
+        JSONObject json = new JSONObject();  // JSONObject does the hardwork of converting data to JSON
+        json.put(JSON_ID, mId.toString());
+        json.put(JSON_TITLE, mTitle);
+        json.put(JSON_COMPLETED, mCompleted);
+        json.put(JSON_DATE, mDate.getTime());
+        return json;
     }
 
     @Override
