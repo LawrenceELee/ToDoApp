@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import java.util.Date;
 import java.util.UUID;
@@ -70,7 +71,7 @@ public class ToDoFragment extends Fragment {
 
     // the "up" button (ancestral hierarchy navigation) goes up the hierarchy vs.
     // vs. the "back" button which goes back to the previous activity (temporal navigation).
-    // "up" button is not availabe before api 11, so warn users of this method with annotation.
+    // "up" button is not available before api 11, so warn users of this method with annotation.
     @TargetApi(11)
     @Nullable
     @Override

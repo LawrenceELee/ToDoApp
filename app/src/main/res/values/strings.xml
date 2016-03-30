@@ -11,6 +11,8 @@
     <string name="new_todo">New ToDo</string>
     <string name="show_subtitle">Show Subtitle</string>
     <string name="hide_subtitle">Hide Subtitle</string>
-    <string name="subtitle">Sometimes tolerance is not a virtue.</string>
+    <string name="subtitle">List your chores, tasks, events, etc.</string>
+    <string name="delete_todo">Delete ToDo</string>
+
 
 </resources>

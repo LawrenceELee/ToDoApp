@@ -1,9 +1,12 @@
 package com.example.lambda.todoapp;
 
+import android.os.Build;
 import android.support.v4.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +30,8 @@ public class ToDoListFragment extends ListFragment {
     private static final String TAG = ToDoListFragment.class.getSimpleName();
 
     private ArrayList<ToDo> mToDos;
+    private boolean mSubtitleVisible;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,10 @@ public class ToDoListFragment extends ListFragment {
         // we no longer use a generic ArrayAdapter<ToDo>
         ToDoAdapter adapter = new ToDoAdapter(mToDos);
         setListAdapter(adapter);
+
+        // track subtitle during a screen rotation
+        setRetainInstance(true);
+        mSubtitleVisible = false;
 
     } // end onCreate
 
@@ -88,6 +97,11 @@ public class ToDoListFragment extends ListFragment {
         super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.fragment_todo_list, menu);
+
+        MenuItem showSubtitle = menu.findItem(R.id.menu_item_show_subtitle);
+        if( mSubtitleVisible && showSubtitle != null ){
+            showSubtitle.setTitle(R.string.hide_subtitle);
+        }
     }
 
     // When user presses a menu item in the options menu, the fragment relieves
@@ -104,9 +118,47 @@ public class ToDoListFragment extends ListFragment {
                 intent.putExtra(ToDoFragment.EXTRA_TODO_ID, t.getId());
                 startActivityForResult(intent, 0);
                 return true;
+            case R.id.menu_item_show_subtitle:
+                // show subtitle if there is an action bar and room on it
+                if( getActivity().getActionBar().getSubtitle() == null ){
+                    getActivity().getActionBar().setSubtitle(R.string.subtitle);
+                    mSubtitleVisible = true;
+                    item.setTitle(R.string.hide_subtitle);
+                } else {
+                    getActivity().getActionBar().setSubtitle(null);
+                    mSubtitleVisible = false;
+                    item.setTitle(R.string.show_subtitle);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = super.onCreateView(inflater, container, savedInstanceState);
+
+        if( Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB ){
+            if( mSubtitleVisible ){
+                getActivity().getActionBar().setSubtitle(R.string.subtitle);
+            }
+        }
+
+        // register ListView for a context menu
+        ListView listView = (ListView) view.findViewById(android.R.id.list);
+        registerForContextMenu(listView);
+
+
+        return view;
+    }
+
+    // callback code for the context menu (to delete a todo task)
+    // similar to onCreateOptionsMenu() except you don't pass it an instance of MenuInflater so you have to get the
+    // MenuInflater associated with ToDoListActivity.
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        getActivity().getMenuInflater().inflate(R.menu.todo_list_item_context, menu);
     }
 
     // using inner class to create an custom adapter for the list_item_todo view
