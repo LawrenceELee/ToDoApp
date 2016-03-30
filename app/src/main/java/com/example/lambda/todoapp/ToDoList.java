@@ -74,6 +74,11 @@ public class ToDoList {
         mToDos.add(t);
     }
 
+    // delete a todo from ArrayList
+    public void deleteTodo(ToDo t){
+        mToDos.remove(t);
+    }
+
     // return the list of todos
     public ArrayList<ToDo> getToDos(){
         return mToDos;

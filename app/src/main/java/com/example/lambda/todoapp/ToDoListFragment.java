@@ -12,6 +12,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -159,6 +161,25 @@ public class ToDoListFragment extends ListFragment {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         getActivity().getMenuInflater().inflate(R.menu.todo_list_item_context, menu);
+    }
+
+    // callback that responds to the menu item selection
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        // need to know which of the todos to delete from the fragment.
+        // call to determine which todos was "long-press" to get context menu up.
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position;
+        ToDoAdapter adapter = (ToDoAdapter) getListAdapter();
+        ToDo todo = adapter.getItem(position);
+
+        switch( item.getItemId() ){
+            case R.id.menu_item_delete_todo:
+                ToDoList.get(getActivity()).deleteTodo(todo);
+                adapter.notifyDataSetChanged();
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     // using inner class to create an custom adapter for the list_item_todo view
