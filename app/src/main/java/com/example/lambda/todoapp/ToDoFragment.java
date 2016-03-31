@@ -41,8 +41,10 @@ import java.util.zip.CheckedInputStream;
 public class ToDoFragment extends Fragment {
 
     public static final String EXTRA_TODO_ID = "com.example.lambda.todoapp.todo_id";
+    public static final String TAG = "ToDoFragment";
     public static final String DIALOG_DATE = "date";
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_PHOTO = 1;
 
 
     private ToDo mToDo;
@@ -146,7 +148,7 @@ public class ToDoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), ToDoCameraActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_PHOTO);
             }
         });
 
@@ -171,6 +173,10 @@ public class ToDoFragment extends Fragment {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
             mToDo.setDate(date);
             updateDate();
+        } else if( requestCode == REQUEST_PHOTO ){
+            // create a new photo object and attach it to the task
+            String filename = data.getStringExtra(ToDoCameraFragment.EXTRA_PHOTO_FILENAME);
+            if( filename != null )  Log.i(TAG, "filename: " + filename);
         }
     }
 
