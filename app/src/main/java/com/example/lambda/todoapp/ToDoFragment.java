@@ -3,6 +3,8 @@ package com.example.lambda.todoapp;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.Date;
@@ -46,6 +50,8 @@ public class ToDoFragment extends Fragment {
 
     private Button mDateButton;
     private CheckBox mCompletedCheckBox;
+
+    private ImageButton mPhotoButton;
 
     // Fragment.onCreate() works nearly the same as Activity.onCreate,
     // the only difference is that you can View.findViewById(int) on the fragment's view.
@@ -133,6 +139,24 @@ public class ToDoFragment extends Fragment {
                 mToDo.setCompleted(true);
             }
         });
+
+        // set up camera button
+        mPhotoButton = (ImageButton) view.findViewById(R.id.todo_imageButton);
+        mPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ToDoCameraActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        // if camera is not available, disable camera functionality
+        PackageManager pm = getActivity().getPackageManager();
+        boolean hasACamera = pm.hasSystemFeature(PackageManager.FEATURE_CAMERA) ||
+                pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT) ||
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD && Camera.getNumberOfCameras() > 0 );
+        if( !hasACamera )   mPhotoButton.setEnabled(false);
+
 
         return view;
     } // end onCreateView

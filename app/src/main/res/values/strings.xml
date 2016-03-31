@@ -13,6 +13,6 @@
     <string name="hide_subtitle">Hide Subtitle</string>
     <string name="subtitle">List your chores, tasks, events, etc.</string>
     <string name="delete_todo">Delete ToDo</string>
-
+    <string name="take">Take Picture</string>
 
 </resources>
